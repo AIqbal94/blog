@@ -1,10 +1,10 @@
 excerpt_separator: ""
 pygments: true
 markdown: kramdown
-url: http://jorgeboucas.github.io
-title: Jorge Boucas
-email: mail@jorgeboucas.com
-author: Jorge Boucas
-description: Not much to put here..
+url: https://bioinformatics.age.mpg.de/blog/
+title: Bioinformatics blog
+email: bioinformatics@age.mpg.de
+author: Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing
+description: This is where we throw some code snippets and discuss stuff from time to time.
 paginate: 4
 google_analytics: 
