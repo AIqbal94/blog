@@ -1,7 +1,7 @@
 excerpt_separator: ""
 pygments: true
 markdown: kramdown
-url: https://bioinformatics.age.mpg.de/blog/
+url: https://bioinformatics.age.mpg.de/blog
 title: Bioinformatics blog
 email: bioinformatics@age.mpg.de
 author: Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing
