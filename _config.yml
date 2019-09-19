@@ -1,5 +1,7 @@
+plugins:
+  - jekyll-paginate
 excerpt_separator: ""
-pygments: true
+highlighter: true
 markdown: kramdown
 url: https://bioinformatics.age.mpg.de/blog
 title: Bioinformatics blog

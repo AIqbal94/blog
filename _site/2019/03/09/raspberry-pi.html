@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>raspberry pi &#8211; Bioinformatics blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="This is where we throw some code snippets and discuss stuff from time to time.">
+    <meta name="author" content="Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing">
+    <meta name="keywords" content="">
+    <link rel="canonical" href="http://localhost:4000/2019/03/09/raspberry-pi.html">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/basscss.css" type="text/css">
+    <link rel="stylesheet" href="/css/pixyll.css" type="text/css">
+    <link rel="stylesheet" href="/css/solarized-dark.css" type="text/css">
+
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Lato:900,300' rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+  <div class="site-wrap">
+    <header class="site-header px2 px-responsive">
+      <div class="mt2 wrap">
+        <div class="measure">
+          <a href="http://localhost:4000" class="left">Bioinformatics blog</a>
+          <nav class="site-nav right">
+            <a href="/contact/">Contact</a>
+
+          </nav>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="post p2 p-responsive wrap" role="main">
+      <div class="measure">
+        <div class="post-header mb2">
+  <h1 class="py2">raspberry pi</h1>
+  <span class="post-meta">Mar 9, 2019</span>
+</div>
+
+<article class="post-content">
+  <p>This tutorial will guide you through the setup of your Raspberry Pi 
+in <em>headless</em> mode as a <strong>Time Capsule</strong> and <strong>AirPlay audio receiver</strong>. 
+Afterwards we will use <em>Docker</em> to setup an <a href="https://etherpad.org"><strong>etherpad</strong></a> server with group 
+and user level pad authentication as well as a <a href="https://nextcloud.com"><strong>Nextcloud</strong></a> server along with <a href="https://webrtc.org"><strong>WebRTC</strong></a> for secure audio/video call conferencing.</p>
+
+<h2 id="materials">Materials</h2>
+
+<ul>
+  <li><a href="https://www.amazon.de/Raspberry-1373331-Pi-Modell-Mainboard/dp/B07BDR5PDW/ref=sr_1_5?s=computers&amp;ie=UTF8&amp;qid=1552132158&amp;sr=1-5&amp;keywords=raspberry+pi+3+b%2B">Raspberry 1373331 Pi 3 Modell B+ Mainboard, 1 GB</a> (34.49 EUR)</li>
+  <li><a href="https://www.amazon.de/dp/B01N5ME6EW/ref=twister_B07BTCSCQ1?_encoding=UTF8&amp;psc=1">Raspberry Pi 3 official power supply</a> (14.90 EUR)</li>
+  <li><a href="https://www.amazon.de/SanDisk-Ultra-microSDHC-Speicherkarte-Adapter/dp/B073SB2L3C/ref=pd_bxgy_147_2/261-7932163-3214767?_encoding=UTF8&amp;pd_rd_i=B073S9SFK2&amp;pd_rd_r=6f8be1de-4261-11e9-aaff-27d05f5ca95c&amp;pd_rd_w=H5Hrn&amp;pd_rd_wg=Ce586&amp;pf_rd_p=1ee75a10-e7c2-423a-9362-8396fcd2b687&amp;pf_rd_r=NVJK17P8Y5H4KXWP0WHV&amp;refRID=NVJK17P8Y5H4KXWP0WHV&amp;th=1">SanDisk Ultra 64GB microSDXC card</a> (15.00 EUR)</li>
+  <li><a href="https://www.amazon.de/Western-Digital-Elements-Festplatte-WDBWLG0040HBK-EESN/dp/B00JT8AJZ0/ref=sr_1_3?s=computers&amp;ie=UTF8&amp;qid=1552132818&amp;sr=1-3&amp;keywords=wd+externe+festplatte+4tb">Western Digital 4TB external hard drive</a> (94.99 EUR)</li>
+  <li>Optional: <a href="https://www.amazon.de/offizielles-Gehäuse-Raspberry-Himbeer-weiß/dp/B01CCPKCSK/ref=pd_bxgy_147_3/261-7932163-3214767?_encoding=UTF8&amp;pd_rd_i=B01CCPKCSK&amp;pd_rd_r=6f8be1de-4261-11e9-aaff-27d05f5ca95c&amp;pd_rd_w=H5Hrn&amp;pd_rd_wg=Ce586&amp;pf_rd_p=1ee75a10-e7c2-423a-9362-8396fcd2b687&amp;pf_rd_r=NVJK17P8Y5H4KXWP0WHV&amp;psc=1&amp;refRID=NVJK17P8Y5H4KXWP0WHV">Raspberry Pi 3 official case</a> (7.99 EUR)</li>
+</ul>
+
+<p>Total: 167.37 EUR</p>
+
+<h2 id="starting-your-raspberry-pi-for-the-firsttime">Starting your Raspberry Pi for the first time</h2>
+
+<p>Download the <em>“Raspbian Stretch Lite”</em> image from the Raspbian downloads 
+page <a href="https://www.raspberrypi.org/downloads/raspbian/">here</a> and follow 
+raspberrypi.org <a href="https://www.raspberrypi.org/documentation/installation/installing-images/README.md">instructions</a> 
+on how to burn the image.</p>
+
+<p>Shortly, after downloading the <a href="https://downloads.raspberrypi.org/raspbian_lite_latest">zip file</a> 
+use <a href="https://www.balena.io/etcher/">balenaEtcher</a> to burn the Raspbian image 
+to your micro sd card.</p>
+
+<p>On your Mac, remove the micro sd card and insert it back in again. For making 
+sure you will be able to connect over ssh to your raspberry pi you will need to</p>
+<pre><code>cd /Volumes/boot
+touch ssh
+</code></pre>
+<p>As we will use the raspberry pi without a screen we decrease the amount of memory available 
+for graphics</p>
+<pre><code>cd /Volumes/boot
+echo gpu_mem=16 &gt;&gt; config.txt
+</code></pre>
+<p>If you wish to connect to your raspberry pi over wifi you need to set this up now by editing the <code>/boot/wpa_supplicant.conf</code> file with your wifi and country 2 letter code (here DE for Germany):</p>
+<pre><code>ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=DE
+
+network={
+	ssid="my_network_name"
+	psk="my_network_password"
+}
+</code></pre>
+<p>If you do not want store your password in plain text you can use <code>wpa_passphrase</code> utility to generate an hashed password:</p>
+<pre><code>wpa_passphrase my_network_name my_network_password
+</code></pre>
+<p>Insert the micro sd card into your raspberry pi. Connect the ethernet cable and power cable to start 
+your raspberry pi. From your Mac connect to the pi on your network by</p>
+<pre><code>ssh pi@raspberrypi
+</code></pre>
+<p>The original password is <code>raspberry</code>.</p>
+
+<p>Setup your user by replacing <code>MYUSERNAME</code> with your username and <code>MYPASSWORD</code> with your own password:</p>
+<pre><code>sudo -s
+echo "en_US.UTF-8 UTF-8" &gt; /etc/locale.gen &amp;&amp; locale-gen
+useradd -m -s /bin/bash -N -u 1001 MYUSERNAME
+echo "root:MYPASSWORD" | chpasswd
+echo "pi:MYPASSWORD" | chpasswd
+echo "MYUSERNAME:MYPASSWORD" | chpasswd
+adduser MYUSERNAME sudo
+exit
+exit
+</code></pre>
+<p>If you don’t yet have SSH keys on your Mac follow the instructions <a href="https://confluence.atlassian.com/bitbucketserver/creating-ssh-keys-776639788.html">here</a> to generate them. Copy your ssh keys to your pi</p>
+<pre><code>ssh-copy-id MYUSERNAME@raspberrypi
+</code></pre>
+<p>Using the password you just used to replace <code>MYPASSWORD</code> above. Edit your Mac’s <code>.ssh/config</code> file</p>
+<pre><code>vim ~/.ssh/config
+</code></pre>
+<p>to include</p>
+<pre><code>Host pi
+    HostName raspberrypi
+    Port 22
+    User MYUSERNAME
+</code></pre>
+<p>You can now connect password free to your pi with:</p>
+<pre><code>ssh pi
+</code></pre>
+<p>and remove the original <code>pi</code> user:</p>
+<pre><code>sudo userdel -r pi
+</code></pre>
+<p>and add git, vim and tmux (because we love it):</p>
+<pre><code>sudo apt-get install -y tmux vim git
+</code></pre>
+<p>Congratulations! Your Raspberry Pi is set and ready to go!</p>
+
+<h2 id="setting-up-your-raspberry-pi-as-an-airplay-audio-receiver">Setting up your Raspberry Pi as an Airplay audio receiver</h2>
+
+<pre><code>ssh pi
+sudo apt-get install -y shairport-sync
+</code></pre>
+<p>Since the analog output is in mono only you might want to increase the quality of the audio coming out of your pi by using HDMI or a peripherical as shown <a href="https://www.matthewwegner.com/raspberry-pi-airplay/">here</a>.</p>
+
+<p>Set your raspberry pi sound higher as the standard 50% is quite low:</p>
+<pre><code>sudo amixer set 'PCM' 75%
+</code></pre>
+
+<h2 id="setting-up-your-raspberry-pi-as-a-time-capsule">Setting up your Raspberry Pi as a Time Capsule</h2>
+
+<p>Connect an empty HFS+ formated external drive to you pi over USB.</p>
+
+<p>Install required packages for dealing with HFS in linux:</p>
+<pre><code>sudo apt-get install -y hfsprogs hfsplus
+</code></pre>
+<p>Find your disk and device name (usually <code>/dev/sda2</code>):</p>
+<pre><code>sudo fdisk -l
+</code></pre>
+<p>Format the drive</p>
+<pre><code>sudo mkfs.hfsplus -v my_external_drive /dev/sda2
+</code></pre>
+<p>Create the mounting point, add it to <code>/etc/fstab</code>, mount the device, and make sure you own the mount point:</p>
+<pre><code>su
+mkdir -p /media/time_machine
+echo "/dev/sda2 /media/time_machine hfsplus force,rw,user,auto 0 0" &gt;&gt; /etc/fstab
+mount -a
+chown -R MYUSERNAME /media/time_machine
+</code></pre>
+<p>Now that you’ve mounted your external drive make sure to never pull the power cable or USB on your raspberry pi as this might render the external drive read-only. For unmounting the drive you can</p>
+<pre><code>sudo umount /dev/sda2
+</code></pre>
+<p>and for shutting down your raspberry pi you can</p>
+<pre><code>sudo shutdown -h now 
+</code></pre>
+<p>This is also where investing a bit more on an external desktop hard drive might be more functional (eg.: <a href="https://www.amazon.de/Western-Digital-WDBWLG0100HBK-EESN-einsatzbereite-Desktop-Festplatte/dp/B07G364YHX/ref=cm_cr_arp_d_product_top?ie=UTF8">Western Digital 10 TB Elements, USB 3.0</a>, 224.99 EUR).</p>
+
+<p>Install the required packages for mounting your pi over afp and emulate a Time Capsule</p>
+<pre><code>su
+aptitude install -y build-essential libevent-dev libssl-dev \
+libgcrypt11-dev libkrb5-dev libpam0g-dev libwrap0-dev \
+libdb-dev libtdb-dev avahi-daemon libavahi-client-dev \
+libacl1-dev libldap2-dev libcrack2-dev systemtap-sdt-dev \
+libdbus-1-dev libdbus-glib-1-dev libglib2.0-dev \
+libio-socket-inet6-perl tracker libtracker-sparql-1.0-dev \
+libtracker-miner-1.0-dev libmariadbclient-dev
+
+wget http://prdownloads.sourceforge.net/netatalk/netatalk-3.1.11.tar.gz
+tar -xf netatalk-3.1.11.tar.gz
+cd netatalk-3.1.11/
+./configure \
+        --with-init-style=debian-systemd \
+        --without-libevent \
+        --without-tdb \
+        --with-cracklib \
+        --enable-krbV-uam \
+        --with-pam-confdir=/etc/pam.d \
+        --with-dbus-daemon=/usr/bin/dbus-daemon \
+        --with-dbus-sysconf-dir=/etc/dbus-1/system.d \
+        --with-tracker-pkgconfig-version=1.0
+make 
+make install
+netatalk -V
+echo """[Global]
+  mimic model = TimeCapsule6,106
+[Time Machine]
+  path = /media/time_machine
+  time machine = yes""" &gt; /usr/local/etc/afp.conf
+systemctl enable avahi-daemon
+systemctl enable netatalk
+service avahi-daemon start
+service netatalk start
+</code></pre>
+<p>You Mac should now be seeing <code>raspberrypi</code> on your network as a Time Capsule and you should be able
+ to mount it by clicking on it on the <em>Finder</em> and select it as a Time Machine destination in 
+ <em>System Preferences</em> &gt; <em>Time Machine</em> &gt; <em>Add or Remove Backup Disk…</em>.</p>
+
+<h2 id="installing-docker">Installing Docker</h2>
+
+<p><a href="https://www.docker.com">Docker</a> is great!</p>
+<pre><code>sudo apt-get update
+curl -sSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+sudo gpasswd -a $USER docker
+docker --version
+sudo reboot
+</code></pre>
+<p>Login to your pi again once it has rebooted <code>ssh pi</code></p>
+<pre><code>docker login
+sudo docker engine activate
+</code></pre>
+<p>and test your docker installation:</p>
+<pre><code>docker run armhf/hello-world
+</code></pre>
+<p>Here the message you should see</p>
+<pre><code>Hello from Docker on armhf!
+This message shows that your installation appears to be working correctly.
+</code></pre>
+
+<h2 id="building-and-running-the-nextcloud-and-etherpad-docker-image">Building and running the Nextcloud and etherpad Docker image</h2>
+
+<p>As we will be generating ssl certificates with a Certificate Authority you will need to make sure
+ your raspberry pi is accessible to the world. For this you will need to make sure your router is 
+<strong>forwarding ports 80 (http) and 443 (https)</strong> to your raspberry pi. If you wish to backup you laptop wherever you are over the internet you can also set port 548 to be forwarded to your raspberry pi and then connect to your Time Capsuble over afp://myhostname.com. For instructions on how to set port forwarding consult your router’s manual.</p>
+
+<p>Also, as you might not have a fixed IP you might wanna create a public <em>Hostname</em> with a <em>Free Dynamic DNS</em>. A good place for this is <a href="https://www.noip.com">noip.com</a> for which you can install the <em>Dynamic Update Client (DUC)</em> so that your web address continuously points to your router’s external IP address. You will need 2 hostnames, 1 for Nextcloud, 1 for etherpad.</p>
+
+<p>Installing the <em>Dynamic Update Client (DUC)</em></p>
+<pre><code>su
+cd /usr/local/src
+wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz&amp;redir_token=8N73LFVgQSnqLuVOQf0FMQHM58F8MTU1MjMzNDQ2MkAxNTUyMjQ4MDYy
+tar xzf noip-duc-linux.tar.gz
+cd noip-2.1.9-1/ &amp;&amp; make &amp;&amp; make install
+/usr/local/bin/noip2
+exit
+</code></pre>
+<p>To test that this is working you can have your router forward port 22 to your raspberry pi 
+and try to ssh to your pi over the <em>Hostname</em> you created at noip.com. For safety reasons you might stop this forwarding once your test comes through.</p>
+
+<p>Clone the repo:</p>
+<pre><code>cd ~/
+git clone https://github.com/jorgeboucas/docker_nextcloud_etherpad.git
+</code></pre>
+<p>Edit the variables in the <code>Dockerfile</code> between <code>##### USER GIVEN VARIABLES #####</code> and <code>##### END OF USER GIVEN VARIABLES #####</code>. You might wanna check this <a href="https://www.rosehosting.com/blog/generate-password-linux-command-line/">blog post</a> for help on choosing passwords.</p>
+<pre><code>##### USER GIVEN VARIABLES #####
+
+# root password
+ENV ROOTPASS=my_root_pass
+
+# password for mysql
+ENV myqsl_password=sqpass
+
+# user and password for the database used by nextcloud
+ENV MAINDB=nextcloud
+ENV PASSWDDB=ncdbpass
+
+# user and password for the nextcloud administrator
+ENV ADMIN=nextcloud
+ENV ADMINPASS=ncpass
+
+# server info for ssl certificates
+ENV SERVER_ADDRESS=nextcloud.myhostname.com
+ENV SERVER_ADMIN="my.email@email.com"
+
+# company info for hacking the nextcloud's landing page
+ENV COMPANY_NAME=company_name
+ENV COMPANY_WEBPAGE='http:\/\/www.company.com'
+ENV COMPANY_SLOGAN='My Company Slogan'
+
+# internal host ip for trusted hosts
+ENV HOST_INTERNAL_IP=pi_ip_on_my_network
+
+# user and password for the database used by etherpad
+ENV ETHERPAD_MYSQL_USER=ETHERPAD_MYSQL_USER
+ENV ETHERPAD_MYSQL_PASS=ETHERPAD_MYSQL_PASS
+
+# user and password for the etherpad administrator
+ENV ETHERPAD_ADMIN=ETHERPAD_ADMIN
+ENV ETHERPAD_ADMIN_PASS=ETHERPAD_ADMIN_PASS
+
+# etherpad address, ip bind,  and port
+ENV ETHERPAD_WEB_ADDRESS=etherpad.myhostname.com
+
+##### END OF USER GIVEN VARIABLES #####
+</code></pre>
+<p>Build the image and run the container:</p>
+<pre><code>cd ~/docker_nextcloud_etherpad
+docker built -t webserver .
+</code></pre>
+<p>Run the container mapping the certificates <code>/etc/letsencrypt</code>, nextcloud <code>/var/www/html</code>, 
+databases <code>var/lib/mysql</code>, and etherpad <code>/etherpad-lite</code> folders to your external hard drive. If you wish to create backups of your Nextcloud and etherpad instances these are the folders you need to copy/backup to a separate/3rd drive. If you ever restart your raspberry pi you can relaunch your instances by starting here:</p>
+<pre><code>cd /media/time_machine
+mkdir -p persistent_data/letsencrypt \
+persistent_data/nextcloud \
+persistent_data/db \
+persistent_data/etherpad &amp;&amp; \
+docker run \
+-v $(pwd)/persistent_data/letsencrypt:/etc/letsencrypt \
+-v $(pwd)/persistent_data/nextcloud:/var/www/html \
+-v $(pwd)/persistent_data/db:/var/lib/mysql \
+-v $(pwd)/persistent_data/etherpad:/etherpad-lite \
+--name cloud -d -p 80:80 -p 443:443 -p 9001:9001 webserver /bin/bash
+</code></pre>
+<p>If you wish to get a shell on the running container you can do so by</p>
+<pre><code>docker exec -it cloud /bin/bash
+</code></pre>
+<p>You can now access your Nextcloud instance at your defined hostname <code>nextcloud.myhostname.com</code> and etherpad at your defined <code>etherpad.myhostname.com</code>.</p>
+
+<p>For login in to Nextcloud you can use the values you’ve set for <code>ADMIN</code> and  <code>ADMINPASS</code>. You can add users to yout Nextcloud instace by using the managment console inside Nexcloud.</p>
+
+<p>For <em>WebRTC</em> you can use the <em>Talk</em> app inside Nextcloud.</p>
+
+<p>For login to etherpad you can use the values you’ve set to <code>ETHERPAD_ADMIN</code> and <code>ETHERPAD_ADMIN_PASS</code>. For private pads you can access <code>etherpad.myhostname.com/mypads</code> which you 
+can administrate on <code>etherpad.myhostname.com/mypads/?/admin</code>.</p>
+
+<p style="text-align: center;"><strong><a target="_blank" href="https://github.com/jorgeboucas/jorgeboucas.github.io/issues">Issues/comments welcome!</a></strong></p>
+
+</article>
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+  <div class="p2 wrap">
+    <div class="measure mt1 center">
+      <small>
+        <b><a href="https://bioinformatics.age.mpg.de">https://bioinformatics.age.mpg.de</a></b>
+        <br>
+        <br>        
+        Theme crafted with love &lt;3 by <a href="http://johnotander.com">John Otander</a> (<a href="https://twitter.com/4lpine">@4lpine</a>). Site powered by <a href="https://tinypress.co/">Tinypress</a>.<br>
+        &lt;/&gt; available on <a href="https://github.com/johnotander/pixyll.git">Github</a>.
+      </small>
+    </div>
+  </div>
+</footer>
+
+
+
+</body>
+</html>
