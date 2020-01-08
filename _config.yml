@@ -4,10 +4,10 @@ excerpt_separator: ""
 highlighter: rouge
 markdown: kramdown
 theme: jekyll-theme-midnight
-url: https://bioinformatics.age.mpg.de/blog
+url: https://aiqbal94.github.io
 title: Bioinformatics blog
 email: aiqbal@age.mpg.de
 author: Ayesha Iqbal
-description: Some useful notes and templates 
+description: Some useful notes and templates.
 paginate: 4
 google_analytics: 
