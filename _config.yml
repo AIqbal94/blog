@@ -3,10 +3,11 @@ plugins:
 excerpt_separator: ""
 highlighter: true
 markdown: kramdown
+theme: jekyll-theme-midnight
 url: https://bioinformatics.age.mpg.de/blog
 title: Bioinformatics blog
-email: bioinformatics@age.mpg.de
-author: Bioinformatics Core Facility of the Max Planck Institute for Biology of Ageing
-description: This is where we throw some code snippets and discuss stuff from time to time.
+email: aiqbal@age.mpg.de
+author: Ayesha Iqbal
+description: Some useful notes and templates 
 paginate: 4
 google_analytics: 
