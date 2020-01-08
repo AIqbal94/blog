@@ -11,3 +11,9 @@ author: Ayesha Iqbal
 description: Some useful notes and templates.
 paginate: 4
 google_analytics: 
+
+# Includes an icon in the footer for each username you enter
+footer-links:
+  email: aiqbal@age.mpg.de
+  github: AIqbal94
+  linkedin: ayesha-iqbal-2726b6151
