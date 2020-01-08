@@ -1,7 +1,7 @@
 plugins:
   - jekyll-paginate
 excerpt_separator: ""
-highlighter: true
+highlighter: rouge
 markdown: kramdown
 theme: jekyll-theme-midnight
 url: https://bioinformatics.age.mpg.de/blog
