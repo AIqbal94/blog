@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Linking raw data files to the projects folder
+title: Linking Raw Data Files to the Projects Folder
 ---
 
 First get the links of the raw data files in a text file using;
