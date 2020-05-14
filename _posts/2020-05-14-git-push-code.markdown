@@ -1,5 +1,5 @@
 ---
-published: true
+published:true
 title: Push code to git without any upload
 layout: post
 ---
